@@ -35,7 +35,7 @@
     - name: Ensure git and git-lfs are installed
       package:
         name:
-          - git
+          - git236
           - git-lfs
         state: present
 
