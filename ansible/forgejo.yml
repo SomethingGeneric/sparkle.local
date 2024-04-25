@@ -88,8 +88,6 @@
       template:
         src: nginx.conf.j2
         dest: /etc/nginx/conf.d/forgejo.conf
-      notify:
-        - restart nginx
 
     - name: Ensure Nginx service is enabled and started
       service:
