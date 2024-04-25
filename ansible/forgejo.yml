@@ -36,11 +36,36 @@
 
     - name: Create git user on Debian or Ubuntu
       when: ansible_distribution == "Debian" or ansible_distribution == "Ubuntu"
-      shell: adduser --system --shell /bin/bash --gecos 'Git Version Control' --group --disabled-password --home /home/git git
+      user:
+        name: git
+        comment: 'Git Version Control'
+        shell: /bin/bash
+        home: /home/git
+        system: yes
+        group: git
+        createhome: yes
+        state: present
 
     - name: Create git user on RedHat-esque distributions
       when: ansible_distribution == "CentOS" or ansible_distribution == "RedHat" or ansible_distribution == "AlmaLinux" or ansible_distribution == "Rocky Linux"
-      shell: groupadd --system git && adduser --system --gid git --home-dir /home/git --create-home git
+      group:
+        name: git
+        state: present
+      tags:
+        - git_group
+
+    - name: Ensure git user exists
+      user:
+        name: git
+        comment: 'Git Version Control'
+        shell: /bin/bash
+        home: /home/git
+        system: yes
+        group: git
+        createhome: yes
+        state: present
+      tags:
+        - git_user
 
     - name: Misc Tasks to Prep /var/lib for Forgejo
       shell: mkdir /var/lib/forgejo ; chown git:git /var/lib/forgejo && chmod 750 /var/lib/forgejo
