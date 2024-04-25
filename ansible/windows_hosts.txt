@@ -1,0 +1,3 @@
+mgmt01-sparkle
+dc01-sparkle
+dc02-glitter
