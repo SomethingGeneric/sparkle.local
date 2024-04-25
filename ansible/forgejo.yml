@@ -21,10 +21,7 @@
       command: mv /tmp/forgejo /usr/local/bin/forgejo
 
     - name: Install EPEL
-      command: |
-      yum install -y epel-release
-      yum update
-      yum repolist
+      command: yum install -y epel-release && yum update && yum repolist
 
     - name: Ensure git and git-lfs are installed
       package:
