@@ -18,7 +18,7 @@
       command: chmod +x /tmp/forgejo
 
     - name: Install binary
-      command: mv /tmp/foregjo /usr/local/bin/forgejo
+      command: mv /tmp/forgejo /usr/local/bin/forgejo
 
     - name: Ensure git and git-lfs are installed
       package:
