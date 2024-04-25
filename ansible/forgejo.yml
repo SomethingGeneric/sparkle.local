@@ -1,15 +1,48 @@
 ---
-# ansible-galaxy role install l3d.gitea
-- name: "Install gitea"
+- name: Install Forgejo
   hosts: util-sparkle
-  roles:
-    - {role: l3d.gitea, tags: forgejo}
-  vars:
-    gitea_fqdn: 'git.sparkle.local'
-    gitea_root_url: 'http://git.sparkle.local'
-    gitea_protocol: http
-    gitea_fork: 'forgejo'
-    gitea_ssh_port: 22 # assuming the host SSH server is running on port 22
-    gitea_user: git # otherwise there will be permission issues
-    gitea_start_ssh: false # to not start the built-in SSH server
-    gitea_forgejo_gpg_key: "EB114F5E6C0DC2BCDD183550A4B61A2DC5923710"
+  become: yes  # To execute tasks with sudo privileges
+
+  tasks:
+    - name: Download binary
+      get_url:
+        url: "https://codeberg.org/forgejo/forgejo/releases/download/v7.0.0/forgejo-7.0.0-linux-amd64"  # Replace with your binary URL
+        dest: "/tmp/forgejo"  # Destination path to download the binary
+
+    - name: Ensure /usr/local/bin directory exists
+      file:
+        path: "/usr/local/bin"
+        state: directory
+
+    - Name: Set perms on exec
+      command: chmod +x /tmp/forgejo
+
+    - name: Install binary
+      command: mv /tmp/foregjo /usr/local/bin/forgejo
+
+    - name: Ensure git and git-lfs are installed
+      package:
+        name:
+          - git
+          - git-lfs
+        state: present
+
+    - name: Create git user on Debian or Ubuntu
+      when: ansible_distribution == "Debian" or ansible_distribution == "Ubuntu"
+      command: adduser --system --shell /bin/bash --gecos 'Git Version Control' --group --disabled-password --home /home/git git
+
+    - name: Create git user on RedHat-esque distributions
+      when: ansible_distribution == "CentOS" or ansible_distribution == "RedHat" or ansible_distribution == "AlmaLinux" or ansible_distribution == "Rocky Linux"
+      command: groupadd --system git && adduser --system --shell /bin/bash --comment 'Git Version Control' --gid git --home-dir /home/git --create-home git
+
+    - name: Misc Tasks to Prep /var/lib for Forgejo
+      command: mkdir /var/lib/forgejo ; chown git:git /var/lib/forgejo && chmod 750 /var/lib/forgejo
+
+    - name: Misc Tasks to Prep /etc/forgejo
+      command: mkdir /etc/forgejo ; chown root:git /etc/forgejo && chmod 770 /etc/forgejo
+
+    - name: Get and install SystemD unit file
+      command: wget -O /etc/systemd/system/forgejo.service https://codeberg.org/forgejo/forgejo/raw/branch/forgejo/contrib/systemd/forgejo.service
+
+    - name: Enable & Start SystemD unit
+      command: systemctl daemon-reload && systemctl enable --now forgejo
