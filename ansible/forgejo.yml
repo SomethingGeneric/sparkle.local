@@ -27,6 +27,11 @@
         cmd: yum install -y epel-release && yum update && yum repolist
         warn: false
 
+    - name: Install IUS.io
+      shell:
+        warn: false
+        cmd: yum install https://repo.ius.io/ius-release-el7.rpm https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm && yum update && yum repolist
+
     - name: Ensure git and git-lfs are installed
       package:
         name:
