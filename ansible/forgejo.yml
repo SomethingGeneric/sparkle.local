@@ -27,10 +27,17 @@
         cmd: yum install -y epel-release && yum update && yum repolist
         warn: false
 
-    - name: Install IUS.io
+    - name: Install ius-release if not installed
+      command: yum list installed | grep -q ius-release
+      register: ius_release_installed
+      changed_when: false
+      ignore_errors: true
+
+    - name: Install ius.io
       shell:
         warn: false
-        cmd: yum install -y https://repo.ius.io/ius-release-el7.rpm https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm && yum update && yum repolist
+        cmd: yum install -y https://repo.ius.io/ius-release-el7.rpm && yum update && yum repolist
+      when: ius_release_installed.rc != 0
 
     - name: Ensure git and git-lfs are installed
       package:
