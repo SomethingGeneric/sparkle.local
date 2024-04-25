@@ -1,0 +1,32 @@
+version: "3"
+services:
+
+  db:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: jeastmanwiki
+      POSTGRES_PASSWORD: eastmaneatsdirt
+      POSTGRES_USER: jeastman
+    logging:
+      driver: "none"
+    restart: unless-stopped
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+  wiki:
+    image: ghcr.io/requarks/wiki:2
+    depends_on:
+      - db
+    environment:
+      DB_TYPE: postgres
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: jeastman
+      DB_PASS: eastmaneatsdirt
+      DB_NAME: jeastmanwiki
+    restart: unless-stopped
+    ports:
+      - "80:3000"
+
+volumes:
+  db-data:
