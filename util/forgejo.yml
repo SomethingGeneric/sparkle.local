@@ -1,0 +1,14 @@
+---
+# ansible-galaxy role install l3d.gitea
+- name: "Install gitea"
+  hosts: util
+  roles:
+    - {role: l3d.gitea, tags: forgejo}
+  vars:
+    gitea_fqdn: 'git.sparkle.local'
+    gitea_root_url: 'http://git.sparkle.local'
+    gitea_protocol: http
+    gitea_fork: 'forgejo'
+    gitea_ssh_port: 22 # assuming the host SSH server is running on port 22
+    gitea_user: git # otherwise there will be permission issues
+    gitea_start_ssh: false # to not start the built-in SSH server
