@@ -90,13 +90,16 @@
         dest: /etc/nginx/conf.d/forgejo.conf
 
     - name: Ensure Nginx service is enabled and started
-      service:
-        name: nginx
-        state: started
-        enabled: yes
+      shell:
+        warn: false
+        cmd: systemctl enable --now nginx
+
+    - name: Restart nginx for shits n giggles
+      shell:
+        warn: false
+        cmd: systemctl restart nginx
 
     - name: Open port 80 through Firewalld
-      firewalld:
-        service: http
-        permanent: yes
-        state: enabled
+      shell:
+        warn: false
+        cmd: firewall-cmd --permanent --add-port=80/tcp && firewall-cmd --reload
