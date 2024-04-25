@@ -15,14 +15,14 @@
         state: directory
 
     - name: Set perms on exec
-      command: chmod +x /tmp/forgejo
+      shell: chmod +x /tmp/forgejo
       warn: false
 
     - name: Install binary
-      command: mv /tmp/forgejo /usr/local/bin/forgejo
+      shell: mv /tmp/forgejo /usr/local/bin/forgejo
 
     - name: Install EPEL
-      command: yum install -y epel-release && yum update && yum repolist
+      shell: yum install -y epel-release && yum update && yum repolist
       warn: false
 
     - name: Ensure git and git-lfs are installed
@@ -34,20 +34,20 @@
 
     - name: Create git user on Debian or Ubuntu
       when: ansible_distribution == "Debian" or ansible_distribution == "Ubuntu"
-      command: adduser --system --shell /bin/bash --gecos 'Git Version Control' --group --disabled-password --home /home/git git
+      shell: adduser --system --shell /bin/bash --gecos 'Git Version Control' --group --disabled-password --home /home/git git
 
     - name: Create git user on RedHat-esque distributions
       when: ansible_distribution == "CentOS" or ansible_distribution == "RedHat" or ansible_distribution == "AlmaLinux" or ansible_distribution == "Rocky Linux"
-      command: groupadd --system git && adduser --system --gid git --home-dir /home/git --create-home git
+      shell: groupadd --system git && adduser --system --gid git --home-dir /home/git --create-home git
 
     - name: Misc Tasks to Prep /var/lib for Forgejo
-      command: mkdir /var/lib/forgejo ; chown git:git /var/lib/forgejo && chmod 750 /var/lib/forgejo
+      shell: mkdir /var/lib/forgejo ; chown git:git /var/lib/forgejo && chmod 750 /var/lib/forgejo
 
     - name: Misc Tasks to Prep /etc/forgejo
-      command: mkdir /etc/forgejo ; chown root:git /etc/forgejo && chmod 770 /etc/forgejo
+      shell: mkdir /etc/forgejo ; chown root:git /etc/forgejo && chmod 770 /etc/forgejo
 
     - name: Get and install SystemD unit file
-      command: wget -O /etc/systemd/system/forgejo.service https://codeberg.org/forgejo/forgejo/raw/branch/forgejo/contrib/systemd/forgejo.service
+      shell: wget -O /etc/systemd/system/forgejo.service https://codeberg.org/forgejo/forgejo/raw/branch/forgejo/contrib/systemd/forgejo.service
 
     - name: Enable & Start SystemD unit
-      command: systemctl daemon-reload && systemctl enable --now forgejo
+      shell: systemctl daemon-reload && systemctl enable --now forgejo
