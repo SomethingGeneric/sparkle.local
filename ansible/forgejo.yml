@@ -1,7 +1,7 @@
 ---
 # ansible-galaxy role install l3d.gitea
 - name: "Install gitea"
-  hosts: util
+  hosts: util-sparkle
   roles:
     - {role: l3d.gitea, tags: forgejo}
   vars:
