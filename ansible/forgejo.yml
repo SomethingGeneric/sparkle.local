@@ -16,14 +16,14 @@
 
     - name: Set perms on exec
       shell: chmod +x /tmp/forgejo
-      warn: false
+        warn: false
 
     - name: Install binary
       shell: mv /tmp/forgejo /usr/local/bin/forgejo
 
     - name: Install EPEL
       shell: yum install -y epel-release && yum update && yum repolist
-      warn: false
+        warn: false
 
     - name: Ensure git and git-lfs are installed
       package:
