@@ -6,8 +6,8 @@
   tasks:
     - name: Download binary
       get_url:
-        url: "https://codeberg.org/forgejo/forgejo/releases/download/v7.0.0/forgejo-7.0.0-linux-amd64"  # Replace with your binary URL
-        dest: "/tmp/forgejo"  # Destination path to download the binary
+        url: "https://codeberg.org/forgejo/forgejo/releases/download/v7.0.0/forgejo-7.0.0-linux-amd64" 
+        dest: "/tmp/forgejo"
 
     - name: Ensure /usr/local/bin directory exists
       file:
