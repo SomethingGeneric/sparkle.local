@@ -1,3 +1,7 @@
+# Compose file for Wiki.js
+# Adapted from official docs: https://docs.requarks.io/install/docker#using-docker-compose
+# for SYS-265 Final Project
+
 version: "3"
 services:
 
