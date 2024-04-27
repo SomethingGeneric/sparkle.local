@@ -1,3 +1,10 @@
+[windows]
 mgmt01-sparkle
 dc01-sparkle
 dc02-glitter
+
+[windows:vars]
+remote_tmp = C:\Users\sparkle-deployer\Tmp
+become_method = runas 
+ansible_shell_type = powershell 
+shell_type = powershell

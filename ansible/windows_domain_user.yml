@@ -1,0 +1,16 @@
+---
+- name: Create a new domain user
+  hosts: dc01-sparkle
+  tasks:
+    - name: Ensure user is created
+      microsoft.ad.user:
+        identity: sparkle-daemon
+        firstname: sparkle-daemon
+        surname: feet
+        password: user_password
+        enabled: yes
+        state: present
+        #For verificaiton of authorized user to create account 
+        domain_username: ansible
+        domain_password: domain_password
+        domain_server: dc01-sparkle.sparkle.local

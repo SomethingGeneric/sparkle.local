@@ -6,6 +6,6 @@
   - name: Add user sparkle-gremlin
     user:
       name: sparkle-gremlin
-      password: "{{ 'ChangeMe$123' | password_hash('sha512') }}"
+      password: "{{ 'password' | password_hash('sha512') }}"
       shell: /bin/bash
       home: /home/sparkle-gremlin
